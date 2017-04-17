@@ -1,0 +1,262 @@
+<html><head></head><body><div class="apidocDiv">
+<style>
+/*csslint
+*/
+.apidocDiv {
+    background: #fff;
+    font-family: Arial, Helvetica, sans-serif;
+}
+.apidocDiv a[href] {
+    color: #33f;
+    font-weight: bold;
+    text-decoration: none;
+}
+.apidocDiv a[href]:hover {
+    text-decoration: underline;
+}
+.apidocCodeCommentSpan {
+    background: #bbf;
+    color: #000;
+    display: block;
+}
+.apidocCodeKeywordSpan {
+    color: #d00;
+    font-weight: bold;
+}
+.apidocCodePre {
+    background: #eef;
+    border: 1px solid;
+    color: #777;
+    padding: 5px;
+    white-space: pre-wrap;
+}
+.apidocFooterDiv {
+    margin-top: 20px;
+    text-align: center;
+}
+.apidocModuleLi {
+    margin-top: 10px;
+}
+.apidocSectionDiv {
+    border-top: 1px solid;
+    margin-top: 20px;
+}
+.apidocSignatureSpan {
+    color: #777;
+    font-weight: bold;
+}
+</style>
+<h1>api documentation for
+    <a href="https://github.com/dfilatov/node-inherit">inherit (v2.2.6)</a>
+</h1>
+<h4>Inheritance module for Node.js and browsers</h4>
+<div class="apidocSectionDiv"><a href="#apidoc.tableOfContents" id="apidoc.tableOfContents"><h1>table of contents</h1></a><ol>
+
+    <li class="apidocModuleLi"><a href="#apidoc.module.inherit">module inherit</a><ol>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.inherit.inherit">
+            function <span class="apidocSignatureSpan"></span>inherit
+            <span class="apidocSignatureSpan">()</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.inherit.self">
+            function <span class="apidocSignatureSpan">inherit.</span>self
+            <span class="apidocSignatureSpan">()</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.inherit.toString">
+            function <span class="apidocSignatureSpan">inherit.</span>toString
+            <span class="apidocSignatureSpan">()</span>
+            </a>
+
+        </li>
+
+    </ol></li>
+
+    <li class="apidocModuleLi"><a href="#apidoc.module.inherit.self">module inherit.self</a><ol>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.inherit.self.self">
+            function <span class="apidocSignatureSpan">inherit.</span>self
+            <span class="apidocSignatureSpan">()</span>
+            </a>
+
+        </li>
+
+    </ol></li>
+
+    <li class="apidocModuleLi"><a href="#apidoc.module.inherit.toString">module inherit.toString</a><ol>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.inherit.toString.toString">
+            function <span class="apidocSignatureSpan">inherit.</span>toString
+            <span class="apidocSignatureSpan">()</span>
+            </a>
+
+        </li>
+
+    </ol></li>
+
+</ol></div>
+
+<div class="apidocSectionDiv">
+<h1><a href="#apidoc.module.inherit" id="apidoc.module.inherit">module inherit</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.inherit.inherit" id="apidoc.element.inherit.inherit">
+        function <span class="apidocSignatureSpan"></span>inherit
+        <span class="apidocSignatureSpan">()</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">function inherit() {
+    var args = arguments,
+        withMixins = isArray(args[0]),
+        hasBase = withMixins || isFunction(args[0]),
+        base = hasBase? withMixins? applyMixins(args[0]) : args[0] : emptyBase,
+        props = args[hasBase? 1 : 0] || {},
+        staticProps = args[hasBase? 2 : 1],
+        res = props.__constructor || (hasBase &amp;&amp; base.prototype &amp;&amp; base.prototype.__constructor)?
+            function() {
+                return this.__constructor.apply(this, arguments);
+            } :
+            hasBase?
+                function() {
+                    return base.apply(this, arguments);
+                } :
+                function() {};
+
+    if(!hasBase) {
+        res.prototype = props;
+        res.prototype.__self = res.prototype.constructor = res;
+        return extend(res, staticProps);
+    }
+
+    extend(res, base);
+
+    res.__parent = base;
+
+    var basePtp = base.prototype,
+        resPtp = res.prototype = objCreate(basePtp);
+
+    resPtp.__self = resPtp.constructor = res;
+
+    props &amp;&amp; override(basePtp, resPtp, props);
+    staticProps &amp;&amp; override(base, res, staticProps);
+
+    return res;
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.inherit.self" id="apidoc.element.inherit.self">
+        function <span class="apidocSignatureSpan">inherit.</span>self
+        <span class="apidocSignatureSpan">()</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">self = function () {
+    var args = arguments,
+        withMixins = isArray(args[0]),
+        base = withMixins? applyMixins(args[0], args[0][0]) : args[0],
+        props = args[1],
+        staticProps = args[2],
+        basePtp = base.prototype;
+
+    props &amp;&amp; override(basePtp, basePtp, props);
+    staticProps &amp;&amp; override(base, base, staticProps);
+
+    return base;
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.inherit.toString" id="apidoc.element.inherit.toString">
+        function <span class="apidocSignatureSpan">inherit.</span>toString
+        <span class="apidocSignatureSpan">()</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">toString = function () {
+    return text;
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+</div>
+
+<div class="apidocSectionDiv">
+<h1><a href="#apidoc.module.inherit.self" id="apidoc.module.inherit.self">module inherit.self</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.inherit.self.self" id="apidoc.element.inherit.self.self">
+        function <span class="apidocSignatureSpan">inherit.</span>self
+        <span class="apidocSignatureSpan">()</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">self = function () {
+    var args = arguments,
+        withMixins = isArray(args[0]),
+        base = withMixins? applyMixins(args[0], args[0][0]) : args[0],
+        props = args[1],
+        staticProps = args[2],
+        basePtp = base.prototype;
+
+    props &amp;&amp; override(basePtp, basePtp, props);
+    staticProps &amp;&amp; override(base, base, staticProps);
+
+    return base;
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+</div>
+
+<div class="apidocSectionDiv">
+<h1><a href="#apidoc.module.inherit.toString" id="apidoc.module.inherit.toString">module inherit.toString</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.inherit.toString.toString" id="apidoc.element.inherit.toString.toString">
+        function <span class="apidocSignatureSpan">inherit.</span>toString
+        <span class="apidocSignatureSpan">()</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">function toString() { [native code] }</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+</div>
+
+<div class="apidocFooterDiv">
+    [ this document was created with
+    <a href="https://github.com/kaizhu256/node-utility2" target="_blank">utility2</a>
+    ]
+</div>
+</div>
+</body></html>
