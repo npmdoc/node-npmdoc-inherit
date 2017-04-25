@@ -72,41 +72,6 @@
 
         </li>
 
-        <li>
-
-            <a class="apidocElementLiA" href="#apidoc.element.inherit.toString">
-            function <span class="apidocSignatureSpan">inherit.</span>toString
-            <span class="apidocSignatureSpan">()</span>
-            </a>
-
-        </li>
-
-    </ol></li>
-
-    <li class="apidocModuleLi"><a href="#apidoc.module.inherit.self">module inherit.self</a><ol>
-
-        <li>
-
-            <a class="apidocElementLiA" href="#apidoc.element.inherit.self.self">
-            function <span class="apidocSignatureSpan">inherit.</span>self
-            <span class="apidocSignatureSpan">()</span>
-            </a>
-
-        </li>
-
-    </ol></li>
-
-    <li class="apidocModuleLi"><a href="#apidoc.module.inherit.toString">module inherit.toString</a><ol>
-
-        <li>
-
-            <a class="apidocElementLiA" href="#apidoc.element.inherit.toString.toString">
-            function <span class="apidocSignatureSpan">inherit.</span>toString
-            <span class="apidocSignatureSpan">()</span>
-            </a>
-
-        </li>
-
     </ol></li>
 
 </ol></div>
@@ -184,70 +149,23 @@
 
     return base;
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
-    </ul>
+    <li>example usage<pre class="apidocCodePre">...
+}
 
-
-
-    <h2>
-        <a href="#apidoc.element.inherit.toString" id="apidoc.element.inherit.toString">
-        function <span class="apidocSignatureSpan">inherit.</span>toString
-        <span class="apidocSignatureSpan">()</span>
-        </a>
-    </h2>
-    <ul>
-    <li>description and source-code<pre class="apidocCodePre">toString = function () {
-    return text;
-}</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
-    </ul>
-
-
-</div>
-
-<div class="apidocSectionDiv">
-<h1><a href="#apidoc.module.inherit.self" id="apidoc.module.inherit.self">module inherit.self</a></h1>
-
-
-    <h2>
-        <a href="#apidoc.element.inherit.self.self" id="apidoc.element.inherit.self.self">
-        function <span class="apidocSignatureSpan">inherit.</span>self
-        <span class="apidocSignatureSpan">()</span>
-        </a>
-    </h2>
-    <ul>
-    <li>description and source-code<pre class="apidocCodePre">self = function () {
-    var args = arguments,
-        withMixins = isArray(args[0]),
-        base = withMixins? applyMixins(args[0], args[0][0]) : args[0],
-        props = args[1],
-        staticProps = args[2],
-        basePtp = base.prototype;
-
-    props &amp;&amp; override(basePtp, basePtp, props);
-    staticProps &amp;&amp; override(base, base, staticProps);
-
-    return base;
-}</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
-    </ul>
-
-
-</div>
-
-<div class="apidocSectionDiv">
-<h1><a href="#apidoc.module.inherit.toString" id="apidoc.module.inherit.toString">module inherit.toString</a></h1>
-
-
-    <h2>
-        <a href="#apidoc.element.inherit.toString.toString" id="apidoc.element.inherit.toString.toString">
-        function <span class="apidocSignatureSpan">inherit.</span>toString
-        <span class="apidocSignatureSpan">()</span>
-        </a>
-    </h2>
-    <ul>
-    <li>description and source-code<pre class="apidocCodePre">function toString() { [native code] }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+function applyMixins(mixins, res) {
+    var i = 1, mixin;
+    while(mixin = mixins[i++]) {
+        res?
+            isFunction(mixin)?
+                inherit.<span class="apidocCodeKeywordSpan">self</span>(res, mixin.prototype, mixin) :
+                inherit.self(res, mixin) :
+            res = isFunction(mixin)?
+                inherit(mixins[0], mixin.prototype, mixin) :
+                inherit(mixins[0], mixin);
+    }
+    return res || mixins[0];
+}
+...</pre></li>
     </ul>
 
 
